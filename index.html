@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List App</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-section, .search-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  background: #00bcd4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background: #333;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #f9f9f9;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li.completed {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.summary {
+  margin-top: 15px;
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>My To-Do List</h1>
+
+    <!-- Input Section -->
+    <div class="input-section">
+      <input type="text" id="taskInput" placeholder="Enter a new task">
+      <button id="addTaskBtn">Add Task</button>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="Search tasks...">
+    </div>
+
+    <!-- Task List -->
+    <ul id="taskList"></ul>
+
+    <!-- Summary -->
+    <div class="summary">
+      <p>Completed: <span id="completedCount">0</span></p>
+      <p>Pending: <span id="pendingCount">0</span></p>
+    </div>
+  </div>
+
+  <!-- Link your JavaScript file here -->
+  <script>
+    // Load tasks from Local Storage
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+const taskInput = document.getElementById("taskInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
+const taskList = document.getElementById("taskList");
+const searchInput = document.getElementById("searchInput");
+const completedCount = document.getElementById("completedCount");
+const pendingCount = document.getElementById("pendingCount");
+
+// Render tasks
+function renderTasks() {
+  taskList.innerHTML = "";
+  let filteredTasks = tasks.filter(task =>
+    task.text.toLowerCase().includes(searchInput.value.toLowerCase())
+  );
+
+  filteredTasks.forEach((task, index) => {
+    let li = document.createElement("li");
+    li.className = task.completed ? "completed" : "";
+
+    li.innerHTML = `
+      <span>${task.text}</span>
+      <div>
+        <button onclick="toggleTask(${index})">${task.completed ? "Undo" : "Done"}</button>
+        <button onclick="editTask(${index})">Edit</button>
+        <button onclick="deleteTask(${index})">Delete</button>
+      </div>
+    `;
+
+    taskList.appendChild(li);
+  });
+
+  updateSummary();
+}
+
+// Add task
+addTaskBtn.addEventListener("click", () => {
+  let text = taskInput.value.trim();
+  if (text === "") {
+    alert("Please enter a task!");
+    return;
+  }
+  tasks.push({ text, completed: false });
+  taskInput.value = "";
+  saveTasks();
+  renderTasks();
+});
+
+// Toggle task completion
+function toggleTask(index) {
+  tasks[index].completed = !tasks[index].completed;
+  saveTasks();
+  renderTasks();
+}
+
+// Edit task
+function editTask(index) {
+  let newText = prompt("Edit task:", tasks[index].text);
+  if (newText !== null && newText.trim() !== "") {
+    tasks[index].text = newText.trim();
+    saveTasks();
+    renderTasks();
+  }
+}
+
+// Delete task
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveTasks();
+  renderTasks();
+}
+
+// Save tasks to Local Storage
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Update summary counts
+function updateSummary() {
+  let completed = tasks.filter(task => task.completed).length;
+  let pending = tasks.length - completed;
+  completedCount.textContent = completed;
+  pendingCount.textContent = pending;
+}
+
+// Search tasks
+searchInput.addEventListener("input", renderTasks);
+
+// Initial render
+renderTasks();
+  </script>
+</body>
+</html>
