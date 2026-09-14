@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naina | Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+
+    /* Navbar */
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #333; color: #fff; }
+    .nav-links { list-style: none; display: flex; }
+    .nav-links li { margin: 0 10px; }
+    .nav-links a { color: #fff; text-decoration: none; transition: 0.3s; }
+    .nav-links a:hover { color: #00bcd4; }
+    .menu-toggle { display: none; cursor: pointer; }
+
+    /* Sections */
+    section { padding: 50px; text-align: center; }
+    .home { background: #3033b8; color: #fff; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    .btn { background: #24013b; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; transition: 0.3s; }
+    .btn:hover { background: #00bcd4; }
+
+    /* Projects Layout */
+    .projects { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+
+    /* Expense Tracker Styles */
+    .expense-container {
+      background: #fff; padding: 20px; border-radius: 10px;
+      width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .expense-container input, .expense-container select, .expense-container button {
+      width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;
+    }
+    .expense-container button { background: #00bcd4; color: #fff; border: none; cursor: pointer; }
+    .expense-container button:hover { background: #333; }
+    .expense-container ul { list-style: none; padding: 0; }
+    .expense-container li { background: #f9f9f9; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .expense-summary { margin-top: 15px; text-align: center; background: #eee; padding: 10px; border-radius: 5px; }
+
+    /* To-Do List Styles */
+    .todo-container {
+      background: #fff; padding: 20px; border-radius: 10px;
+      width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .todo-input-section, .todo-search-section { display: flex; gap: 10px; margin-bottom: 15px; }
+    .todo-container input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    .todo-container button { padding: 10px; background: #00bcd4; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    .todo-container button:hover { background: #333; }
+    .todo-container ul { list-style: none; padding: 0; }
+    .todo-container li { background: #f9f9f9; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .todo-container li.completed { text-decoration: line-through; color: gray; }
+    .todo-summary { margin-top: 15px; text-align: center; }
+
+    /* Contact */
+    form { display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: auto; }
+    input, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background: #00bcd4; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #333; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; }
+      .menu-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Naina</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="menu-toggle">&#9776;</div>
+    </nav>
+  </header>
+
+  <!-- Home Section -->
+  <section id="home" class="home">
+    <h1>Hi, I'm Naina</h1>
+    <p>B.Tech Student</p>
+    <a href="#projects" class="btn">View My Work</a>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <h2>About Me</h2>
+    <p>I am a 3rd year B.Tech student passionate about learning new things I love to Read.</p>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="skills">
+    <h2>Skills</h2>
+    <ul>
+      <li>HTML, CSS, JavaScript</li>
+      <li>Linux & Networking Basics</li>
+      <li>Database Management Systems</li>
+    </ul>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="projects">
+    <h2>Projects</h2>
+
+    <!-- Expense Tracker -->
+    <div class="expense-container">
+      <h3>Expense Tracker</h3>
+      <input type="text" id="desc" placeholder="Description">
+      <input type="number" id="amount" placeholder="Amount">
+      <select id="type">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <button id="addBtn">Add Transaction</button>
+      <ul id="transactionList"></ul>
+      <div class="expense-summary">
+        <p>Total Income: ₹<span id="totalIncome">0</span></p>
+        <p>Total Expense: ₹<span id="totalExpense">0</span></p>
+        <p>Balance: ₹<span id="balance">0</span></p>
+      </div>
+    </div>
+
+    <!-- To-Do List -->
+    <div class="todo-container">
+      <h3>My To-Do List</h3>
+      <div class="todo-input-section">
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button id="addTaskBtn">Add Task</button>
+      </div>
+      <div class="todo-search-section">
+        <input type="text" id="searchInput" placeholder="Search tasks...">
+      </div>
+      <ul id="taskList"></ul>
+      <div class="todo-summary">
+        <p>Completed: <span id="completedCount">0</span></p>
+        <p>Pending: <span id="pendingCount">0</span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Resume Section -->
+  <section id="resume" class="resume">
+    <h2>Resume</h2>
+    <a href="resume.pdf" download class="btn">Download Resume</a>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <h2>Contact Me</h2>
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="message" placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2026 Naina</p>
+  </footer>
+
+  <script>
+    /* ===== Portfolio JS ===== */
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let name = document.getElementById('name').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let message = document.getElementById('message').value.trim();
+      if(name === "" || email === "" || message === "") {
+        alert("Please fill all fields!");
+      } else {
+        alert("Message sent successfully!");
+        this.reset();
+      }
+    });
+
+    /* ===== Expense Tracker JS ===== */
+    (function(){
+      let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+      const desc = document.getElementById("desc");
+      const amount = document.getElementById("amount");
+      const type = document.getElementById("type");
+      const addBtn = document.getElementById("addBtn");
+      const transactionList = document.getElementById("transactionList");
+      const totalIncome = document.getElementById("totalIncome");
+      const totalExpense = document.getElementById("totalExpense");
+      const balance = document.getElementById("balance");
+
+      function renderTransactions() {
+        transactionList.innerHTML = "";
+        transactions.forEach((t, index) => {
+          let li = document.createElement("li");
+          li.innerHTML = `
+            <span>${t.desc} - ₹${t.amount} (${t.type})</span>
+            <div>
+              <button onclick="editTransaction(${index})">Edit</button>
+              <button onclick="deleteTransaction(${index})">Delete</button>
+            </div>
+          `;
+          transactionList.appendChild(li);
+        });
+        updateSummary();
+      }
+
+      addBtn.addEventListener("click", () => {
+        let d = desc.value.trim();
+        let a = parseFloat(amount.value);
+        let t = type.value;
+        if(d === "" || isNaN(a) || a <= 0) { alert("Please enter valid details!"); return; }
+        transactions.push({ desc: d, amount: a, type: t });
+        desc.value = ""; amount.value = "";
+        saveTransactions(); renderTransactions();
+      });
+
+      window.editTransaction = function(index) {
+        let t = transactions[index];
+        let newDesc = prompt("Edit description:", t.desc);
+        let newAmount = prompt("Edit amount:", t.amount);
+        if(newDesc && newAmount && !isNaN(newAmount)) {
+          transactions[index].desc = newDesc;
+          transactions[index].amount = parseFloat(newAmount);
+          saveTransactions(); renderTransactions();
+        }
+      }
+
+      window.deleteTransaction = function(index) {
+        transactions.splice(index, 1);
+        saveTransactions(); renderTransactions();
+      }
+
+      function saveTransactions() { localStorage.setItem("transactions", JSON.stringify(transactions)); }
+      function updateSummary() {
+        let income = transactions.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
+        let expense = transactions.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
+        totalIncome.textContent = income; totalExpense.textContent = expense; balance.textContent = income - expense;
+      }
+      renderTransactions();
+    })();
+
+    /* ===== To-Do List JS ===== */
+    (function(){
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      const taskInput = document.getElementById("taskInput");
+      const addTaskBtn = document.getElementById("addTaskBtn");
+      const taskList = document.getElementById("taskList");
+      const searchInput = document.getElementById("searchInput");
+      const completedCount = document.getElementById("completedCount");
+      const pendingCount = document.getElementById("pendingCount");
+
+      function renderTasks() {
+        taskList.innerHTML = "";
+        let filteredTasks = tasks.filter(task => task.text.toLowerCase().includes(searchInput.value.toLowerCase()));
+        filteredTasks.forEach((task, index) => {
+          let li = document.createElement("li");
+          li.className = task.completed ? "completed" : "";
+          li.innerHTML = `
+            <span>${task.text}</span>
+            <div>
+              <button onclick="toggleTask(${index})">${task.completed ? "Undo" : "Done"}</button>
+              <button onclick="editTask(${index})">Edit</button>
+              <button onclick="deleteTask(${index})">Delete</button>
+            </div>
+          `;
+          taskList.appendChild(li);
+        });
+        updateSummary();
+      }
+
+      addTaskBtn.addEventListener("click", () => {
+        let text = taskInput.value.trim();
+        if (text === "") { alert("Please enter a task!"); return; }
+        tasks.push({ text, completed: false });
+        taskInput.value = "";
+        saveTasks(); renderTasks();
+      });
+
+      window.toggleTask = function(index) {
+        tasks[index].completed = !tasks[index].completed;
+        saveTasks(); renderTasks();
+      }
+
+      window.editTask = function(index) {
+        let newText = prompt("Edit task:", tasks[index].text);
+        if (newText !== null && newText.trim() !== "") {
+          tasks[index].text = newText.trim();
+          saveTasks(); renderTasks();
+        }
+      }
+
+      window.deleteTask = function(index) {
+        tasks.splice(index, 1);
+        saveTasks(); renderTasks();
+      }
+
+      function saveTasks() { localStorage.setItem("tasks", JSON.stringify(tasks)); }
+      function updateSummary() {
+        let completed = tasks.filter(task => task.completed).length;
+        let pending = tasks.length - completed;
+        completedCount.textContent = completed;
+        pendingCount.textContent = pending;
+      }
+
+      searchInput.addEventListener("input", renderTasks);
+      renderTasks();
+    })();
+  </script>
+</body>
+</html>
