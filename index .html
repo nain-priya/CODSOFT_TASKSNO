@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    h1 { text-align: center; margin-bottom: 20px; }
+    input, select, button {
+      width: 100%; padding: 10px; margin: 5px 0;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    button {
+      background: #00bcd4; color: #fff; border: none; cursor: pointer;
+    }
+    button:hover { background: #333; }
+    ul { list-style: none; padding: 0; }
+    li {
+      background: #f9f9f9; margin: 5px 0; padding: 10px;
+      border-radius: 5px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary {
+      margin-top: 15px; text-align: center;
+      background: #eee; padding: 10px; border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+
+    <!-- Input Section -->
+    <input type="text" id="desc" placeholder="Description">
+    <input type="number" id="amount" placeholder="Amount">
+    <select id="type">
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+    <button id="addBtn">Add Transaction</button>
+
+    <!-- Transaction List -->
+    <ul id="transactionList"></ul>
+
+    <!-- Summary -->
+    <div class="summary">
+      <p>Total Income: ₹<span id="totalIncome">0</span></p>
+      <p>Total Expense: ₹<span id="totalExpense">0</span></p>
+      <p>Balance: ₹<span id="balance">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+    const desc = document.getElementById("desc");
+    const amount = document.getElementById("amount");
+    const type = document.getElementById("type");
+    const addBtn = document.getElementById("addBtn");
+    const transactionList = document.getElementById("transactionList");
+    const totalIncome = document.getElementById("totalIncome");
+    const totalExpense = document.getElementById("totalExpense");
+    const balance = document.getElementById("balance");
+
+    // Render transactions
+    function renderTransactions() {
+      transactionList.innerHTML = "";
+      transactions.forEach((t, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `
+          <span>${t.desc} - ₹${t.amount} (${t.type})</span>
+          <div>
+            <button onclick="editTransaction(${index})">Edit</button>
+            <button onclick="deleteTransaction(${index})">Delete</button>
+          </div>
+        `;
+        transactionList.appendChild(li);
+      });
+      updateSummary();
+    }
+
+    // Add transaction
+    addBtn.addEventListener("click", () => {
+      let d = desc.value.trim();
+      let a = parseFloat(amount.value);
+      let t = type.value;
+
+      if(d === "" || isNaN(a) || a <= 0) {
+        alert("Please enter valid details!");
+        return;
+      }
+
+      transactions.push({ desc: d, amount: a, type: t });
+      desc.value = "";
+      amount.value = "";
+      saveTransactions();
+      renderTransactions();
+    });
+
+    // Edit transaction
+    function editTransaction(index) {
+      let t = transactions[index];
+      let newDesc = prompt("Edit description:", t.desc);
+      let newAmount = prompt("Edit amount:", t.amount);
+      if(newDesc && newAmount && !isNaN(newAmount)) {
+        transactions[index].desc = newDesc;
+        transactions[index].amount = parseFloat(newAmount);
+        saveTransactions();
+        renderTransactions();
+      }
+    }
+
+    // Delete transaction
+    function deleteTransaction(index) {
+      transactions.splice(index, 1);
+      saveTransactions();
+      renderTransactions();
+    }
+
+    // Save to Local Storage
+    function saveTransactions() {
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+    }
+
+    // Update summary
+    function updateSummary() {
+      let income = transactions.filter(t => t.type === "income")
+                               .reduce((sum, t) => sum + t.amount, 0);
+      let expense = transactions.filter(t => t.type === "expense")
+                                .reduce((sum, t) => sum + t.amount, 0);
+      totalIncome.textContent = income;
+      totalExpense.textContent = expense;
+      balance.textContent = income - expense;
+    }
+
+    // Initial render
+    renderTransactions();
+  </script>
+</body>
+</html>
